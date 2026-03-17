@@ -1,0 +1,31 @@
+﻿name: Generate PDF Presentation
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install Marp
+      run: npm install -g @marp-team/marp-cli
+    
+    - name: Generate PDF
+      run: |
+        cd presentations
+        marp evaluation.md --pdf --output ../evaluation_finale.pdf
+    
+    - name: Upload PDF
+      uses: actions/upload-artifact@v3
+      with:
+        name: evaluation-pdf
+        path: evaluation_finale.pdf
